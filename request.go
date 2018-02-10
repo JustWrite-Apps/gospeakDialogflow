@@ -1,5 +1,12 @@
 package gospeakDialogflow
 
+import (
+	"fmt"
+	"strconv"
+
+	"github.com/blforce/gospeakCommon"
+)
+
 type context struct {
 	Name          string            `json:"name"`
 	LifespanCount uint16            `json:"lifespanCount"`
@@ -49,20 +56,20 @@ type intent struct {
 }
 
 type queryResult struct {
-	QueryText                   string            `json:"queryText"`
-	LanguageCode                string            `json:"languageCode"`
-	SpeechRecognitionConfidence float32           `json:"speechRecognitionConfidence"`
-	Action                      string            `json:"action"`
-	Parameters                  map[string]string `json:"parameters"`
-	AllRequiredPramsPresent     bool              `json:"allRequiredParamsPresent"`
-	FulfillmentText             string            `json:"fulfillmentText"`
-	FulfillmentMessages         []interface{}     `json:"fulfillmentMessages"`
-	WebhookSource               string            `json:"webhookSource"`
-	WebhookPayload              interface{}       `json:"webhookPayload"`
-	OutputContexts              []context         `json:"outputContexts"`
-	Intent                      intent            `json:"intent"`
-	IntentDetectionConfidence   float32           `json:"intentDetectionConfidence"`
-	DiagnosticInfo              interface{}       `json:"diagnostricInfo"`
+	QueryText                   string                 `json:"queryText"`
+	LanguageCode                string                 `json:"languageCode"`
+	SpeechRecognitionConfidence float32                `json:"speechRecognitionConfidence"`
+	Action                      string                 `json:"action"`
+	Parameters                  map[string]interface{} `json:"parameters"`
+	AllRequiredPramsPresent     bool                   `json:"allRequiredParamsPresent"`
+	FulfillmentText             string                 `json:"fulfillmentText"`
+	FulfillmentMessages         []interface{}          `json:"fulfillmentMessages"`
+	WebhookSource               string                 `json:"webhookSource"`
+	WebhookPayload              interface{}            `json:"webhookPayload"`
+	OutputContexts              []context              `json:"outputContexts"`
+	Intent                      intent                 `json:"intent"`
+	IntentDetectionConfidence   float32                `json:"intentDetectionConfidence"`
+	DiagnosticInfo              interface{}            `json:"diagnostricInfo"`
 }
 
 type originalDetectIntentRequest struct {
@@ -83,10 +90,16 @@ func (r Request) GetRequestType() string {
 
 func (r Request) GetArgument(slot string) string {
 	if val, ok := r.QueryResult.Parameters[slot]; ok {
-		return val
+		output := fmt.Sprintf("%v", val)
+		return output
 	}
 
 	return ""
+}
+
+func (r Request) GetArgumentInt(slot string) int64 {
+	result, _ := strconv.ParseInt(r.GetArgument(slot), 10, 64)
+	return result
 }
 
 func (r Request) GetIntent() string {
@@ -94,5 +107,9 @@ func (r Request) GetIntent() string {
 }
 
 func (r Request) GetPlatform() int {
-	return 2
+	return gospeakCommon.DialogFlow
+}
+
+func (r Request) GetResponse() gospeakCommon.Response {
+	return Response{}
 }
