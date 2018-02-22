@@ -27,6 +27,20 @@ func (r Response) SetText(value string) gospeakCommon.Response {
 	return r
 }
 
+func (r Response) SetImageCard(title, imageURL, text string) gospeakCommon.Response {
+	cardMessage := message{
+		Card: &card{
+			Title:    title,
+			ImageURI: imageURL,
+			Subtitle: text,
+		},
+	}
+
+	r.FulfillmentMessages = append(r.FulfillmentMessages, cardMessage)
+
+	return r
+}
+
 func (r Response) GetBytes() []byte {
 	result, err := json.Marshal(r)
 	if err != nil {

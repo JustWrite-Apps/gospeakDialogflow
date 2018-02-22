@@ -46,13 +46,13 @@ type suggestions struct {
 }
 
 type message struct {
-	Platform        string         `json:"platform,omitempty"`
-	Text            text           `json:"text,omitempty"`
-	Image           image          `json:"image,omitempty"`
-	QuickReplies    quickReplies   `json:"quickReplies,omitempty"`
-	Card            card           `json:"card,omitempty"`
-	Payload         interface{}    `json:"payload,omitempty"`
-	SimpleResponses simpleResponse `json:"simpleResponses,omitempty"`
-	BasicCard       basicCard      `json:"basicCard,omitempty"`
-	Suggestions     suggestions    `json:"suggestions,omitempty"`
+	Platform        string          `json:"platform,omitempty"`
+	Text            *text           `json:"text,omitempty"`
+	Image           *image          `json:"image,omitempty"`
+	QuickReplies    *quickReplies   `json:"quickReplies,omitempty"`
+	Card            *card           `json:"card,omitempty"`
+	Payload         *interface{}    `json:"payload,omitempty"`
+	SimpleResponses *simpleResponse `json:"simpleResponses,omitempty"`
+	BasicCard       *basicCard      `json:"basicCard,omitempty"`
+	Suggestions     *suggestions    `json:"suggestions,omitempty"`
 }
