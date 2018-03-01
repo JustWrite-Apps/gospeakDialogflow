@@ -111,5 +111,11 @@ func (r Request) GetPlatform() int {
 }
 
 func (r Request) GetResponse() gospeakCommon.Response {
-	return Response{}
+	return Response{
+		request: r,
+	}
+}
+
+func (r Request) GetLanguage() string {
+	return r.QueryResult.LanguageCode
 }
