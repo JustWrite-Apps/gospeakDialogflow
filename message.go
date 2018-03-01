@@ -11,6 +11,10 @@ type simpleResponse struct {
 	DisplayText  string `json:"displayText,omitempty"`
 }
 
+type simpleResponses struct {
+	SimpleResponses []simpleResponse `json:"simpleResponses"`
+}
+
 type text struct {
 	Text []string `json:"text,omitempty"`
 }
@@ -34,8 +38,8 @@ type card struct {
 type basicCard struct {
 	Title         string   `json:"title,omitempty"`
 	Subtitle      string   `json:"subtitle,omitempty"`
-	FormattedText string   `json:"formattedText"`
-	Image         image    `json:"image,omitempty"`
+	FormattedText string   `json:"formattedText,omitempty"`
+	Image         *image   `json:"image,omitempty"`
 	Buttons       []button `json:"buttons,omitempty"`
 }
 
@@ -46,13 +50,13 @@ type suggestions struct {
 }
 
 type message struct {
-	Platform        string          `json:"platform,omitempty"`
-	Text            *text           `json:"text,omitempty"`
-	Image           *image          `json:"image,omitempty"`
-	QuickReplies    *quickReplies   `json:"quickReplies,omitempty"`
-	Card            *card           `json:"card,omitempty"`
-	Payload         *interface{}    `json:"payload,omitempty"`
-	SimpleResponses *simpleResponse `json:"simpleResponses,omitempty"`
-	BasicCard       *basicCard      `json:"basicCard,omitempty"`
-	Suggestions     *suggestions    `json:"suggestions,omitempty"`
+	Platform        string           `json:"platform,omitempty"`
+	Text            *text            `json:"text,omitempty"`
+	Image           *image           `json:"image,omitempty"`
+	QuickReplies    *quickReplies    `json:"quickReplies,omitempty"`
+	Card            *card            `json:"card,omitempty"`
+	Payload         *interface{}     `json:"payload,omitempty"`
+	SimpleResponses *simpleResponses `json:"simpleResponses,omitempty"`
+	BasicCard       *basicCard       `json:"basicCard,omitempty"`
+	Suggestions     *suggestions     `json:"suggestions,omitempty"`
 }
