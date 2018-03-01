@@ -14,26 +14,63 @@ type eventInput struct {
 }
 
 type Response struct {
-	FulfillmentText     string      `json:"fulfillmentText,omitempty"`
-	FulfillmentMessages []message   `json:"fulfillmentMessages,omitempty"`
-	Source              string      `json:"source,omitempty"`
-	Payload             interface{} `json:"payload,omitempty"`
-	OutputContexts      []context   `json:"outputContexts,omitempty"`
-	FollowupEventInput  interface{} `json:"followupEventInput,omitempty"`
+	FulfillmentText     string       `json:"fulfillmentText,omitempty"`
+	FulfillmentMessages []message    `json:"fulfillmentMessages,omitempty"`
+	Source              string       `json:"source,omitempty"`
+	Payload             *interface{} `json:"payload,omitempty"`
+	OutputContexts      []context    `json:"outputContexts,omitempty"`
+	FollowupEventInput  *interface{} `json:"followupEventInput,omitempty"`
+	platform            string
+	request             Request
 }
 
-func (r Response) SetText(value string) gospeakCommon.Response {
-	r.FulfillmentText = value
+func (r Response) SetPlatform(newPlatform string) Response {
+	if r.platform == newPlatform {
+		return r
+	}
+
+	r.platform = newPlatform
+
+	for idx := range r.FulfillmentMessages {
+		r.FulfillmentMessages[idx].Platform = newPlatform
+	}
+
+	return r
+}
+
+func (r Response) AddText(value string) gospeakCommon.Response {
+	simpleMessage := simpleResponse{
+		DisplayText:  value,
+		TextToSpeech: value,
+	}
+
+	message := message{
+		Platform:        r.platform,
+		SimpleResponses: &simpleResponses{},
+	}
+
+	message.SimpleResponses.SimpleResponses = append(message.SimpleResponses.SimpleResponses, simpleMessage)
+
+	r.FulfillmentMessages = append(r.FulfillmentMessages, message)
+
+	r.FulfillmentText = r.FulfillmentText + value + " "
+
 	return r
 }
 
 func (r Response) SetImageCard(title, imageURL, text string) gospeakCommon.Response {
 	cardMessage := message{
-		Card: &card{
+		Platform: r.platform,
+		BasicCard: &basicCard{
 			Title:    title,
-			ImageURI: imageURL,
 			Subtitle: text,
 		},
+	}
+
+	if len(imageURL) > 0 {
+		cardMessage.BasicCard.Image = &image{
+			ImageURI: imageURL,
+		}
 	}
 
 	r.FulfillmentMessages = append(r.FulfillmentMessages, cardMessage)
